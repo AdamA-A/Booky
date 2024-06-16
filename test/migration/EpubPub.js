@@ -44,8 +44,9 @@ class EpubPub {
 
     static async epubPub_main(title = "Ruin and Rising", author = "Leigh Bardugo") {
         var concatTitleAuthor = (title + ' by ' + author).replaceAll(' ', '-').toLocaleLowerCase();
-        var url = "https://www.epub.pub/book/" + concatTitleAuthor;
-        alert(url);
+        var publicUrl = "https://www.epub.pub/book/" + concatTitleAuthor;
+        var html = await GAS.fetchWithContentText(publicUrl)
+        var spreadUrl;
     }
     static async downloadEpub(epubFileName = "ruin-and-rising-by-leigh-bardugo.epub", spreadUrl = "https://spread.epub.pub/epub/5a51abd37412f4000781b287") {
         
@@ -58,7 +59,7 @@ class EpubPub {
         zip.file("META-INF/container.xml", "<?xml version=\"1.0\"?>\n<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\n   <rootfiles>\n      <rootfile full-path=\"OEBPS/content.opf\" media-type=\"application/oebps-package+xml\"/>\n      \n   </rootfiles>\n</container>\n    ");
 
         // Get the Content OPF from its ACTUAL url
-        var contentUrl = await GAS.getContentUrl(spreadUrl);
+        var contentUrl = this.getContentUrl(spreadUrl);
         var realInfo = contentUrl.substring(contentUrl.indexOf("asset.epub.pub/epub/") + 20); // Contains info from which the next two variables are derived
         epubFileName = realInfo.substring(0, realInfo.indexOf('/')); // EpubPub sometimes alters file names, like appending a "-1" to the end, so this retrieves the actual file name
         var oebpsUrlInsert = realInfo.substring(epubFileName.length + 1, realInfo.indexOf("content.opf")); // EpubPub sometimes renames or foregoes an "OEBPS" folder, so this retrieves the name of the actual folder where OEBPS files are stored
@@ -106,6 +107,11 @@ class EpubPub {
 
         // Return the found HREFs
         return arr;
+    }
+    static async getContentUrl() {
+        return "https://asset.epub.pub/epub/ruin-and-rising-by-leigh-bardugo-1.epub/content.opf";
+        var contentText = await GAS.fetchWithContentText(spreadUrl);
+        return;
     }
 }
 EpubPub.epubPub_main();

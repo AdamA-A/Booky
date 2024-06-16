@@ -20,6 +20,14 @@ class GAS {
     static async getContentUrl(spreadUrl) {
         return "https://asset.epub.pub/epub/ruin-and-rising-by-leigh-bardugo-1.epub/content.opf";
     }
+    static async fetchWithContentText(toFetch) {
+        if (toFetch.indexOf("https://spread") == 0) {
+            return await this.getContentFile();
+        }// else if (toFetch.indexOf())
+    }
+    static async getPublicEpubFile() {
+        return ``;
+    }
     static async getContentFile(contentUrl) {
         return `<?xml version='1.0' encoding='utf-8'?>
 <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id" version="2.0">
