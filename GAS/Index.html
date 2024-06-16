@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    .pacifico-regular {
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    /* General */
+    body,
+    html {
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Booky Background */
+    #bookyBackground {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #00ff00;
+      text-align: center;
+    }
+
+    #bookyForeground {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -57.5%);
+      color: white;
+      /* background-color: red; */
+    }
+
+    #bookyBackground:not(.bookyFullBackground) {
+      transition: width 2s, height 2s;
+    }
+
+    #bookyForeground:not(.bookyFullBackground > #bookyForeground) {
+      transition: transform 2s, font-size 2s, top 2s;
+    }
+
+    #bookyBackground:not(.topLeftBooky) {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .bookyFullBackground {
+      font-size: min(50vh, 25vw);
+    }
+
+    .middleBookyForeground>#bookyForeground {
+      font-size: calc(min(50vh, 25vw) / 2);
+      top: 35%;
+    }
+
+    #bookyContent {
+      /* background-color: white; */
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    #googleLoginPlea {
+      text-align: center;
+      font-size: max(5vh, 2.5vw);
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.5s, opacity 0.5s linear, transform 1s;
+    }
+
+    #googleLoginPlea:not(.middleBookyForeground > #bookyContent > #googleLoginPlea) {
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+      transform: translateX(200vh);
+    }
+
+    #googleLoginButton {
+      text-align: center;
+      font-family: "Pacifico", cursive;
+      font-size: max(5vh, 2.5vw);
+      font-weight: bold;
+      background-color: white;
+      border: 7px solid #ffffff;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #1e8dba;
+      /* text-decoration: underline; */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="bookyBackground" class="bookyFullBackground">
+    <span id="bookyForeground" class="pacifico-regular">Booky</span>
+    <div id="bookyContent">
+      <div id="googleLoginPlea">
+        Booky is a free tool to retrieve books!
+        <br>
+Please log-in to a Google Account to access Booky.
+        <br>
+        <br>
+        <a href="<?= DEPLOYMENTS.Content.url ?>"><button id="googleLoginButton" class="">Log In</button></a>
+      </div>
+    </div>
+  </div>
+  <script>
+    var cur = 0;
+var changes = ["bookyFullBackground", "middleBookyForeground"];
+var bookyBackground = document.getElementById('bookyBackground');
+var bookyForeground = document.getElementById('bookyForeground');
+var bookyContent = document.getElementById('bookyContent');
+var curBookyBottom = 0;
+setInterval(fixContentHeight);
+window.onload = () => {setTimeout(sceneChange, 1000)}
+function sceneChange() {
+console.log(`replacing scene ${cur}: ${changes[cur]}`);
+bookyBackground.classList.remove(changes[cur]);
+cur = (cur + 1) % (changes.length);
+bookyBackground.classList.add(changes[cur]);
+console.log(`with scene ${cur}: ${changes[cur]}`);
+button.textContent = changes[cur];
+}
+function fixContentHeight() {
+curBookyBottom = bookyForeground.getBoundingClientRect().bottom;
+bookyContent.style.top = curBookyBottom + "px";
+}
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?!= include('Stylesheet'); ?>
+</head>
+
+<body>
+  <div id="bookyBackground" class="bookyFullBackground">
+    <span id="bookyForeground" class="pacifico-regular">Booky</span>
+    <div id="bookyContent" style="">
+      <!-- Start of Google Login -->
+      <div id="googleLoginPlea">
+        Booky is a free tool to retrieve books!
+        <br>
+        Please log-in to a Google Account to access Booky.
+        <br>
+        <br>
+        <a href="#"><button id="googleLoginButton" class="">Log In</button></a>
+      </div>
+      <!-- Start of Libby Search -->
+      <div id="libbyLibrarySearch">
+        <div class="searchWrapper">
+          <h4>Libby Library Search:</h4>
+          <div class="searchBar">
+            <input class="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search for libraries..."
+              value="">
+            <button class="searchQuerySubmit" type="submit" name="searchQuerySubmit" onclick="alert('Searching!')">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#666666"
+                  d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="searchResults">
+
+          <div class="libraryResult">
+            <img src="https://thunder.cdn.overdrive.com/logos/crushed/2864.png?1">
+            <div class="libraryResultInfo">
+              <h4>NOBLE VERY LONG NAME GOES HERE</h4>
+              <p>Wharton County Library<br>1920 N Fulton St<br>Wharton, Texas US<br>(1 of 14 branches)</p>
+            </div>
+            <button>Add Library</button>
+          </div>
+
+        </div>
+      </div>
+      <!-- Start of Sora Search -->
+      <div id="soraLibrarySearch">
+        <div class="searchWrapper">
+          <h4>Sora Library Search:</h4>
+          <div class="searchBar">
+            <input class="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search for libraries..."
+              value="">
+            <button class="searchQuerySubmit" type="submit" name="searchQuerySubmit" onclick="alert('Searching!')">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#666666"
+                  d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="searchResults">
+
+          <div class="libraryResult">
+            <img src="https://thunder.cdn.overdrive.com/logos/crushed/2864.png?1">
+            <div class="libraryResultInfo">
+              <h4>NOBLE VERY LONG NAME GOES HERE</h4>
+              <p>Wharton County Library<br>1920 N Fulton St<br>Wharton, Texas US<br>(1 of 14 branches)</p>
+            </div>
+            <button>Add Library</button>
+          </div>
+
+        </div>
+      </div>
+      <!-- Start of Book Search -->
+      <div id="bookSearch">
+        <div class="searchWrapper">
+          <h4>Book Search:</h4>
+          <div class="searchBar">
+            <input class="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search for libraries..."
+              value="">
+            <button class="searchQuerySubmit" type="submit" name="searchQuerySubmit" onclick="alert('Searching!')">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#666666"
+                  d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="bookList">
+          <div class="bookContainer">
+            <div class="book">
+              <h2 class="title">Siege and Storm</h2>
+              <p class="author">Leigh Bardugo</p>
+              <img class="cover"
+                src="https://img2.od-cdn.com/ImageType-150/2390-1/{62922068-4F45-415E-818B-B5AE3F3A2697}IMG150.JPG">
+            </div>
+            <div class="icons">
+              <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
+                <span>✓</span></span>
+              <br>
+              <span><img class="libbyIcon" src="https://libbyapp.com/dewey-16.7.1/inc/images/libby-icon-ios-180.png">
+                <span>15/17</span></span>
+              <br>
+              <span><img class="soraIcon"
+                  src="https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png">
+                <span>10/10</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Book Search -->
+    </div>
+  </div>
+  <button style="position: fixed; top: 0; right: 0;" onclick="sceneChange(this);">topLeftBooky</button>
+  <button style="position: fixed; bottom: 0; right: 0;" onclick="other(this)">Other</button>
+  <?!= include('JavaScript'); ?>
+
+  </script>
+
+
+</body>
+
+</html>
