@@ -1,13 +1,3 @@
-class Search {
-    constructor(query) {
-        this.query = query;
-        alert("test");
-    }
-    async getAll() {
-        this.libby();
-    }
-
-}
 class EpubPub {
     // JS-Equivalent of a private constructor
     static #isInternalConstructing = false;

@@ -58,7 +58,16 @@ class OverDrive {
             await GAS.setSoraLibraries(this.#cachedUserLibraries);
         }
     }
-    async fetchBooks(searchQuery = "shadow and bone", libraries = this.#cachedUserLibraries/*[this.fetchLibraries("noble")[2]]*/, formats = ["ebook", "audiobook", "magazine"]) {
+    static async fetchBooks(searchQuery, formats, specificInstance/* = OverDrive.getLibbyInstance().#cachedUserLibraries*/) {
+        if (!formats) {
+            formats = ["ebook", "audiobook", "magazine"];
+        }
+        var libraries;
+        if (specificInstance instanceof OverDrive) {
+            libraries = specificInstance.#cachedUserLibraries;
+        } else {
+            libraries = OverDrive.getLibbyInstance().#cachedUserLibraries.concat(OverDrive.getSoraInstance().#cachedUserLibraries);
+        }
         const groupBooksById = (books) => {
             return books.reduce((result, book) => {
                 let match = result.find((r) => r.id === book.id)
@@ -84,10 +93,11 @@ class OverDrive {
                 const bookData = {
                     availableCopies: book.availableCopies,
                     estimatedWaitDays: book.estimatedWaitDays,
-                    href: `https://${this.#useLibby ? "libby" : "sora"}app.com/${this.#useLibby ? "search" : "library"}/${book.library}/search/query-${book.title}/page-1/${book.id}`,
+                    href: `https://${book.usingLibby ? "libby" : "sora"}app.com/${book.usingLibby ? "search" : "library"}/${book.library}/search/query-${book.title}/page-1/${book.id}`,
                     holdsCount: book.holdsCount,
                     library: book.library,
                     libraryName: book.libraryName,
+                    usingLibby: book.usingLibby,
                     isAvailable: book.isAvailable,
                     ownedCopies: book.ownedCopies
                 }
@@ -100,6 +110,7 @@ class OverDrive {
             const items = results.map((libraryResults, libraryIndex) => libraryResults.items.map((item, sortOrder) => {
                 item.library = libraries[libraryIndex].fulfillmentId
                 item.libraryName = libraries[libraryIndex].name
+                item.usingLibby = libraries[libraryIndex].usingLibby
                 item.sortOrder = sortOrder
                 return item
             }))
@@ -125,8 +136,8 @@ class OverDrive {
         }
         const findBooks = async (searchTerm, libraries, format) => {
             var urlList = libraries.map(library => findBook(library, searchTerm, format));
-            console.log("fetching")
             const results = await Fetcher.fetchAll(urlList, "json");
+            // TODO Use string similarity (https://stackoverflow.com/questions/10473745/compare-strings-javascript-return-of-likely) to sort sora and libby results together (since sora is just appended to libby unless book id's happen to match)
             return consolidateBookSearchResults(results, libraries);
         }
         const books = await findBooks(searchQuery, libraries, formats)
@@ -179,7 +190,8 @@ class OverDrive {
                     name: branch.systems[0].name,
                     logo: branch?.systems[0]?.styling?.logos?.at(0)?.sourceUrl,
                     branchIds: branch.systems[0].branchIds,
-                    websiteId: branch.systems[0].websiteId
+                    websiteId: branch.systems[0].websiteId,
+                    usingLibby: this.#useLibby
                 }
             })
             .filter((value, index, self) => {
