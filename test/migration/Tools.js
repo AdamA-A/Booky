@@ -134,3 +134,29 @@ class GAS {
         return;
     }
 }
+/* Adapted from https://developer.mozilla.org/en-US/docs/Glossary/Base64#:~:text=of%20the%20string%3A-,JS,-Copy%20to%20Clipboard */
+class Encoding {
+    static #base64ToBytes(base64) {
+        const binString = atob(base64);
+        return Uint8Array.from(binString, (m) => m.codePointAt(0));
+      }
+      
+      static #bytesToBase64(bytes) {
+        const binString = Array.from(bytes, (byte) =>
+          String.fromCodePoint(byte),
+        ).join("");
+        return btoa(binString);
+      }
+      
+      static encode(data) {
+        var JSONData = JSON.stringify(data);
+        var encoded = Encoding.#bytesToBase64(new TextEncoder().encode(JSONData));
+        return encoded;
+      }
+      static decode(encodedData) {
+        var JSONData = new TextDecoder().decode(Encoding.#base64ToBytes(encodedData));
+        var decoded = JSON.parse(JSONData);
+        return decoded;
+      }
+      
+}
