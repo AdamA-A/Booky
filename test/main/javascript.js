@@ -8,10 +8,13 @@ async function searchLibby(query) {
               <h4>${library.name}</h4>
               <p>${library.locationName}<br>${library.address}<br>${library.city}, ${library.region} ${library.countryCode}<br>(1 of ${library.branchIds.length} branches)</p>
             </div>
-            <button>Add Lib.</button></div>`;
+            <button data-library="${Encoding.encode(library)}" onclick="addLibbyLibrary(this)">Add Lib.</button></div>`;
     });
     newHTML = newHTML.join('');
     librariesResultContainer.innerHTML = newHTML;
+}
+async function searchLibbyNew(query) {
+    await Search.libbyLibraries.sendQuery(query);
 }
 async function searchSora(query) {
     var sora = OverDrive.getSoraInstance();
@@ -23,15 +26,43 @@ async function searchSora(query) {
               <h4>${library.name}</h4>
               <p>${library.locationName}<br>${library.address}<br>${library.city}, ${library.region} ${library.countryCode}<br>(1 of ${library.branchIds.length} branches)</p>
             </div>
-            <button>Add Lib.</button></div>`;
+            <button data-library="${Encoding.encode(library)}" onclick="addSoraLibrary(this)">Add Lib.</button></div>`;
     });
     newHTML = newHTML.join('');
     librariesResultContainer.innerHTML = newHTML;
 }
 async function addLibbyLibrary(btn) {
-    //
+    var libby = OverDrive.getLibbyInstance();
+    var encodedLibrary = btn.getAttribute("data-library");
+    var library = Encoding.decode(encodedLibrary);
+    libby.addLibrary(library);
+    btn.textContent = "Remove Lib.";
+    btn.setAttribute("onclick", "removeLibbyLibrary(this)")
 }
-
+async function removeLibbyLibrary(btn) {
+    var libby = OverDrive.getLibbyInstance();
+    var encodedLibrary = btn.getAttribute("data-library");
+    var library = Encoding.decode(encodedLibrary);
+    libby.removeLibrary(library);
+    btn.textContent = "Add Lib.";
+    btn.setAttribute("onclick", "addLibbyLibrary(this)")
+}
+async function addSoraLibrary(btn) {
+    var sora = OverDrive.getSoraInstance();
+    var encodedLibrary = btn.getAttribute("data-library");
+    var library = Encoding.decode(encodedLibrary);;
+    sora.addLibrary(library);
+    btn.textContent = "Remove Lib.";
+    btn.setAttribute("onclick", "removeSoraLibrary(this)")
+}
+async function removeSoraLibrary(btn) {
+    var sora = OverDrive.getLibbyInstance();
+    var encodedLibrary = btn.getAttribute("data-library");
+    var library = Encoding.decode(encodedLibrary);
+    sora.removeLibrary(library);
+    btn.textContent = "Add Lib.";
+    btn.setAttribute("onclick", "addSoraLibrary(this)")
+}
 /* <div class="libraryResult">
             <img src="https://thunder.cdn.overdrive.com/logos/crushed/2864.png?1">
             <div class="libraryResultInfo">
