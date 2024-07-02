@@ -49,10 +49,86 @@ class LibrarySearch {
     }
 }
 class BookSearch {
-    //
+    // Set by constructor
+    toSearchLibby;
+    toSearchSora;
+    toSearchEpubpub;
+
+    // Used within class
+    results; // // An array of books to be returned by sendQuery
+
+    constructor(toSearchLibby, toSearchSora, toSearchEpubpub) {
+        this.toSearchLibby = toSearchLibby;
+        this.toSearchSora = toSearchSora;
+        this.toSearchEpubpub = toSearchEpubpub;
+    }
+    async searchOverdrive(query) {
+        var books = [];
+        // Search OverDrive
+        if (this.toSearchLibby || this.toSearchSora) {
+            if (this.toSearchLibby && this.toSearchSora) { // Search both Libby and Sora libraries
+                books = await OverDrive.fetchBooks(query);
+            } else if (this.toSearchLibby) { // Search Libby libraries
+                books = await OverDrive.fetchBooks(query, null, OverDrive.getLibbyInstance());
+            } else { // Search Sora libraries
+                books = await OverDrive.fetchBooks(query, null, OverDrive.getSoraInstance());
+            }
+            /* possibleEpubPubBooks = books.map(book => {
+                return {
+                    'title': book.title.toLowerCase(),
+                    'author': book.author.toLowerCase()
+                }
+            }); */
+        }
+        return books;
+    }
+    async searchOpenlibrary(query) {
+        const cleanedQuery = encodeURIComponent(query.trim());
+        var possibleBooks = []; // Although I could get more than one book, I decided to set the limit to one in the openlibrary api because it is quicker. Perhaps support for more books will be added in the future
+
+        // Search OpenLibrary, to check later for EpubPub
+        if (this.toSearchEpubpub) {
+            console.log("fetching epubpub");
+            // Documentation at https://openlibrary.org/dev/docs/api/search
+            var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1`).then(response => response.json());
+            var openLibraryBook = openLibraryResults.docs[0];
+            possibleBooks.push({ 'title': openLibraryBook.title.toLowerCase(), 'author': openLibraryBook.author_name[0].toLowerCase() });
+        }
+        return possibleBooks;
+    }
+    async sendQuery(query) {
+        var possibleEpubPubBooks = []; // To be filled with books similar to the query (book titles in lower case because they will be transcribed to a lowercased URL later)
+
+        // Search for both OverDrive and EpubPub at (almost) the same time
+        this.overdriveSearchPromise = this.searchOverdrive(query);
+        var [overdriveBooks, openlibraryBooks] = await Promise.all([this.searchOverdrive(query), this.searchOpenlibrary(query)]);
+
+        // Add the possible book(s) if it's not already in the list provided by Overdrive
+        for (var possibleBook of openlibraryBooks) {
+            if (!(overdriveBooks.some(book => {
+                return book.author == possibleBook.author && book.title == possibleBook.title
+            }))) {
+                possibleEpubPubBooks.push(possibleBook);
+            }
+        }
+
+        // console.log(overdriveBooks);
+        // console.log(possibleEpubPubBooks);
+    }
 }
 class Search {
     static libbyLibraries = new LibrarySearch(true);
     static soraLibraries = new LibrarySearch(false);
-    constructor() {}
+    constructor() { }
+}
+test();
+async function test() {
+    var libby = OverDrive.getLibbyInstance();
+    var libbyLibraries = await libby.fetchLibraries("noble");
+    libby.addLibrary(libbyLibraries[0]);
+    var sora = OverDrive.getSoraInstance();
+    var soraLibraries = await sora.fetchLibraries("noble");
+    sora.addLibrary(soraLibraries[0]);
+    var search = (new BookSearch(true, true, true));
+    search.sendQuery("ruin and rising");
 }

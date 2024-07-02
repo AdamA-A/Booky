@@ -32,11 +32,22 @@ class EpubPub {
 
     #useLibby; // Defined in constructor
 
-    static async epubPub_main(title = "Ruin and Rising", author = "Leigh Bardugo") {
-        var concatTitleAuthor = (title + ' by ' + author).replaceAll(' ', '-').toLocaleLowerCase();
-        var publicUrl = "https://www.epub.pub/book/" + concatTitleAuthor;
-        var html = await GAS.fetchWithContentText(publicUrl)
+    static async epubPub_main(books) {
+        var books = [{title: "Ruin and Rising", author: "Leigh Bardugo"}]
+        var toFetchBookUrls = books.map(book => {
+            var concatTitleAuthor = (book.title + ' by ' + book.author).replaceAll(' ', '-').toLocaleLowerCase();
+            return "https://www.epub.pub/book/" + concatTitleAuthor;
+        })
+        var bookWebpages = JSON.parse(await GAS.fetchAllWithMutedExceptions(toFetchBookUrls));
+        for (let i in books) {
+            var page = bookWebpages[i];
+            console.log(page)
+            books[i]["epubVersion"] = {
+                "exists": page.code == "200",
+            };
+        }
         var spreadUrl;
+        console.log(bookWebpages);
     }
     static async downloadEpub(epubFileName = "ruin-and-rising-by-leigh-bardugo.epub", spreadUrl = "https://spread.epub.pub/epub/5a51abd37412f4000781b287") {
         
