@@ -33,7 +33,9 @@ class EpubPub {
     #useLibby; // Defined in constructor
 
     static async epubPub_main(books) {
-        var books = [{ title: "Ruin and Rising", author: "Leigh Bardugo" }]
+        //
+    }
+    static async fetchEpubVersions(books) { // Input in format: [{ title: "Ruin and Rising", author: "Leigh Bardugo" }]
         var toFetchBookUrls = books.map(book => {
             var concatTitleAuthor = (book.title + ' by ' + book.author).replaceAll(' ', '-').toLocaleLowerCase();
             return "https://www.epub.pub/book/" + concatTitleAuthor;
@@ -41,14 +43,14 @@ class EpubPub {
 
         var bookWebpages = JSON.parse(await GAS.fetchAllWithMutedExceptions(toFetchBookUrls));
 
-        var docParser = new DOMParser (); // For parsing webpages
+        var docParser = new DOMParser(); // For parsing webpages
         var spreadUrls = []; // to be filled with spread URLs to fetch
         var epubVersions = []; // the output of this function
         var spreadUrlMap = {}; // to map spread URLs to their place in epubVersions
         bookWebpages.forEach((webpage, i) => {
             // If webpage is invalid, skip to next one
             if (webpage.code != "200") {
-                epubVersions.push({"exists": false});
+                epubVersions.push({ "exists": false });
                 return;
             }
 
@@ -58,8 +60,16 @@ class EpubPub {
             var url = "https://spread.epub.pub/epub/" + readId;
             spreadUrls.push(url);
 
+            // Parse the webpage for book's public EPUB file name
+            var epubVersion = { "exists": true };
+            var strong = parsed.evaluate("//strong[contains(., 'ile') and contains(., 'ame')]", parsed.querySelector("#bookDetails > ul"), null, XPathResult.ANY_TYPE, null).iterateNext();
+            var parent = strong.parentNode;
+            var publicEpubFileName = parent.textContent.replace(strong.textContent, "");
+            epubVersion["publicEpubFileName"] = publicEpubFileName;
+
+
             // Make sure to mark this webpage in epubVersions
-            var spreadUrlLocation = (epubVersions.push({"exists": true})) - 1;
+            var spreadUrlLocation = (epubVersions.push(epubVersion)) - 1;
             spreadUrlMap[spreadUrlLocation] = i.toString();
         })
 
@@ -67,14 +77,16 @@ class EpubPub {
         spreadWebpages.forEach((webpage, i) => {
             var epubVersionLocation = spreadUrlMap[i.toString()];
 
+            // Get content URL
             var parsed = docParser.parseFromString(webpage.text, 'text/html');
             var contentUrl = parsed.querySelector("#assetUrl").getAttribute("value");
             epubVersions[epubVersionLocation]["contentUrl"] = contentUrl;
         })
-        
+        console.log(epubVersions);
+        // this.downloadEpub(epubVersions[0].publicEpubFileName, epubVersions[0].contentUrl)
         return epubVersions;
     }
-    static async downloadEpub(epubFileName = "ruin-and-rising-by-leigh-bardugo.epub", spreadUrl = "https://spread.epub.pub/epub/5a51abd37412f4000781b287") {
+    static async downloadEpub(epubFileName = "ruin-and-rising-by-leigh-bardugo.epub", contentUrl = "https://asset.epub.pub/epub/ruin-and-rising-by-leigh-bardugo-1.epub/content.opf") {
 
         // EPUB file name when downloaded
         var publicEpubFileName = epubFileName;
@@ -85,7 +97,6 @@ class EpubPub {
         zip.file("META-INF/container.xml", "<?xml version=\"1.0\"?>\n<container version=\"1.0\" xmlns=\"urn:oasis:names:tc:opendocument:xmlns:container\">\n   <rootfiles>\n      <rootfile full-path=\"OEBPS/content.opf\" media-type=\"application/oebps-package+xml\"/>\n      \n   </rootfiles>\n</container>\n    ");
 
         // Get the Content OPF from its ACTUAL url
-        var contentUrl = this.getContentUrl(spreadUrl);
         var realInfo = contentUrl.substring(contentUrl.indexOf("asset.epub.pub/epub/") + 20); // Contains info from which the next two variables are derived
         epubFileName = realInfo.substring(0, realInfo.indexOf('/')); // EpubPub sometimes alters file names, like appending a "-1" to the end, so this retrieves the actual file name
         var oebpsUrlInsert = realInfo.substring(epubFileName.length + 1, realInfo.indexOf("content.opf")); // EpubPub sometimes renames or foregoes an "OEBPS" folder, so this retrieves the name of the actual folder where OEBPS files are stored
@@ -140,4 +151,4 @@ class EpubPub {
         return;
     }
 }
-EpubPub.epubPub_main();
+// EpubPub.epubPub_main();
