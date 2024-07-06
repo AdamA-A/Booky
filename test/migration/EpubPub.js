@@ -33,24 +33,49 @@ class EpubPub {
     #useLibby; // Defined in constructor
 
     static async epubPub_main(books) {
-        var books = [{title: "Ruin and Rising", author: "Leigh Bardugo"}]
+        var books = [{ title: "Ruin and Rising", author: "Leigh Bardugo" }]
         var toFetchBookUrls = books.map(book => {
             var concatTitleAuthor = (book.title + ' by ' + book.author).replaceAll(' ', '-').toLocaleLowerCase();
             return "https://www.epub.pub/book/" + concatTitleAuthor;
         })
+
         var bookWebpages = JSON.parse(await GAS.fetchAllWithMutedExceptions(toFetchBookUrls));
-        for (let i in books) {
-            var page = bookWebpages[i];
-            console.log(page)
-            books[i]["epubVersion"] = {
-                "exists": page.code == "200",
-            };
-        }
-        var spreadUrl;
-        console.log(bookWebpages);
+
+        var docParser = new DOMParser (); // For parsing webpages
+        var spreadUrls = []; // to be filled with spread URLs to fetch
+        var epubVersions = []; // the output of this function
+        var spreadUrlMap = {}; // to map spread URLs to their place in epubVersions
+        bookWebpages.forEach((webpage, i) => {
+            // If webpage is invalid, skip to next one
+            if (webpage.code != "200") {
+                epubVersions.push({"exists": false});
+                return;
+            }
+
+            // Parse the webpage for book's spread url (which means, the url to the read-online swipe version)
+            var parsed = docParser.parseFromString(webpage.text, 'text/html');
+            var readId = parsed.querySelector(".btn-read[data-domain*=spread]").getAttribute("data-readid");
+            var url = "https://spread.epub.pub/epub/" + readId;
+            spreadUrls.push(url);
+
+            // Make sure to mark this webpage in epubVersions
+            var spreadUrlLocation = (epubVersions.push({"exists": true})) - 1;
+            spreadUrlMap[spreadUrlLocation] = i.toString();
+        })
+
+        var spreadWebpages = JSON.parse(await GAS.fetchAllWithMutedExceptions(spreadUrls));
+        spreadWebpages.forEach((webpage, i) => {
+            var epubVersionLocation = spreadUrlMap[i.toString()];
+
+            var parsed = docParser.parseFromString(webpage.text, 'text/html');
+            var contentUrl = parsed.querySelector("#assetUrl").getAttribute("value");
+            epubVersions[epubVersionLocation]["contentUrl"] = contentUrl;
+        })
+        
+        return epubVersions;
     }
     static async downloadEpub(epubFileName = "ruin-and-rising-by-leigh-bardugo.epub", spreadUrl = "https://spread.epub.pub/epub/5a51abd37412f4000781b287") {
-        
+
         // EPUB file name when downloaded
         var publicEpubFileName = epubFileName;
 
