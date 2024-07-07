@@ -88,7 +88,7 @@ class BookSearch {
 
         // Search OpenLibrary, to check later for EpubPub
         if (this.toSearchEpubpub) {
-            console.log("fetching epubpub");
+            // console.log("fetching epubpub");
             // Documentation at https://openlibrary.org/dev/docs/api/search
             var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1`).then(response => response.json());
             var openLibraryBook = openLibraryResults.docs[0];
@@ -96,7 +96,14 @@ class BookSearch {
         }
         return possibleBooks;
     }
+    async from(toSearchLibby, toSearchSora, toSearchEpubpub) {
+        this.toSearchLibby = toSearchLibby;
+        this.toSearchSora = toSearchSora;
+        this.toSearchEpubpub = toSearchEpubpub;
+        return this;
+    }
     async sendQuery(query) {
+        var books = [];
         var possibleEpubPubBooks = []; // To be filled with books similar to the query (book titles in lower case because they will be transcribed to a lowercased URL later)
 
         // Search for both OverDrive and EpubPub at (almost) the same time
@@ -112,13 +119,30 @@ class BookSearch {
             }
         }
 
-        // console.log(overdriveBooks);
-        // console.log(possibleEpubPubBooks);
+        // Search EPUB for only the books already found
+        books = overdriveBooks.concat(possibleEpubPubBooks);
+        if (this.toSearchEpubpub) {
+            var epubVersions = await EpubPub.fetchEpubVersions(books);
+            for (var i in epubVersions) {
+                books[i]["epubVersion"] = epubVersions[i];
+            }
+        } else {
+            books = books.map(book => {
+                book["epubVersion"] = { "exists": false };
+                return book;
+            })
+        }
+
+        // Render books
+        for (book of books) {
+            //
+        }
     }
 }
 class Search {
     static libbyLibraries = new LibrarySearch(true);
     static soraLibraries = new LibrarySearch(false);
+    static books = new BookSearch(true, true, true);
     constructor() { }
 }
 test();
@@ -129,6 +153,9 @@ async function test() {
     var sora = OverDrive.getSoraInstance();
     var soraLibraries = await sora.fetchLibraries("noble");
     sora.addLibrary(soraLibraries[0]);
-    var search = (new BookSearch(true, true, true));
-    search.sendQuery("ruin and rising");
+    var search = Search.books;
+    console.log("Start searching...");
+    console.time("Searching")
+    await search.sendQuery("ruin and rising");
+    console.timeEnd("Searching")
 }

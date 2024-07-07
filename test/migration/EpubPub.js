@@ -82,7 +82,7 @@ class EpubPub {
             var contentUrl = parsed.querySelector("#assetUrl").getAttribute("value");
             epubVersions[epubVersionLocation]["contentUrl"] = contentUrl;
         })
-        console.log(epubVersions);
+        // console.log(epubVersions);
         // this.downloadEpub(epubVersions[0].publicEpubFileName, epubVersions[0].contentUrl)
         return epubVersions;
     }
