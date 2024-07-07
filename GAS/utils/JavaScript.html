@@ -1,16 +1,11 @@
 <script>
-window.addEventListener('load', function() {
-  console.log('Page is loaded');
-});
-
-
-// https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/HD_transparent_picture.png/1024px-HD_transparent_picture.png
+    // https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/HD_transparent_picture.png/1024px-HD_transparent_picture.png
 // https://www.epub.pub/images/apple-touch-icon.png?20191128
 // https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png
 // https://libbyapp.com/dewey-16.7.1/inc/images/libby-icon-ios-180.png
 // https://ssl.gstatic.com/docs/script/css/add-ons.css
 // https://img2.od-cdn.com/ImageType-150/2390-1/{62922068-4F45-415E-818B-B5AE3F3A2697}IMG150.JPG
-var cur = 0;
+var cur = 3;
 var changes = ["bookyFullBackground", "middleBookyForeground", "highBookyForeground", "highBookyForeground2", "topLeftBooky"];
 var bookyBackground = document.getElementById('bookyBackground');
 var bookyForeground = document.getElementById('bookyForeground');
@@ -47,4 +42,5 @@ function other(button) {
         toClone.parentNode.appendChild(toClone.cloneNode(true));
     }
 }
+sceneChange(document.getElementById("bme"))
 </script>
