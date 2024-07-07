@@ -4,7 +4,7 @@
 // https://libbyapp.com/dewey-16.7.1/inc/images/libby-icon-ios-180.png
 // https://ssl.gstatic.com/docs/script/css/add-ons.css
 // https://img2.od-cdn.com/ImageType-150/2390-1/{62922068-4F45-415E-818B-B5AE3F3A2697}IMG150.JPG
-var cur = 0;
+var cur = 3;
 var changes = ["bookyFullBackground", "middleBookyForeground", "highBookyForeground", "highBookyForeground2", "topLeftBooky"];
 var bookyBackground = document.getElementById('bookyBackground');
 var bookyForeground = document.getElementById('bookyForeground');
@@ -41,3 +41,4 @@ function other(button) {
         toClone.parentNode.appendChild(toClone.cloneNode(true));
     }
 }
+sceneChange(document.getElementById("bme"))

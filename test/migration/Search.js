@@ -92,7 +92,7 @@ class BookSearch {
             // Documentation at https://openlibrary.org/dev/docs/api/search
             var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1`).then(response => response.json());
             var openLibraryBook = openLibraryResults.docs[0];
-            possibleBooks.push({ 'title': openLibraryBook.title.toLowerCase(), 'author': openLibraryBook.author_name[0].toLowerCase() });
+            possibleBooks.push({ 'title': openLibraryBook.title, 'author': openLibraryBook.author_name[0] });
         }
         return possibleBooks;
     }
@@ -113,7 +113,7 @@ class BookSearch {
         // Add the possible book(s) if it's not already in the list provided by Overdrive
         for (var possibleBook of openlibraryBooks) {
             if (!(overdriveBooks.some(book => {
-                return book.author == possibleBook.author && book.title == possibleBook.title
+                return book.author.toLowerCase() == possibleBook.author.toLowerCase() && book.title.toLowerCase() == possibleBook.title.toLowerCase()
             }))) {
                 possibleEpubPubBooks.push(possibleBook);
             }
@@ -123,7 +123,7 @@ class BookSearch {
         books = overdriveBooks.concat(possibleEpubPubBooks);
         if (this.toSearchEpubpub) {
             var epubVersions = await EpubPub.fetchEpubVersions(books);
-            for (var i in epubVersions) {
+            for (let i in epubVersions) {
                 books[i]["epubVersion"] = epubVersions[i];
             }
         } else {
@@ -134,9 +134,38 @@ class BookSearch {
         }
 
         // Render books
-        for (book of books) {
-            //
-        }
+        var renderedBooks = books.map(book => {
+            let libbyItems = book.items.filter(item => item.usingLibby);
+            let soraItems = book.items.filter(item => !(item.usingLibby));
+
+            let libbySumOfCopies = libbyItems.map(item => item.ownedCopies).reduce((partialSum, a) => partialSum + a, 0);
+            let libbySumOfAvailableCopies = libbyItems.map(item => item.availableCopies).reduce((partialSum, a) => partialSum + a, 0);
+
+            let soraSumOfCopies = soraItems.map(item => item.ownedCopies).reduce((partialSum, a) => partialSum + a, 0);
+            let soraSumOfAvailableCopies = soraItems.map(item => item.availableCopies).reduce((partialSum, a) => partialSum + a, 0);
+
+            let text = `<div class="bookContainer">
+            <div class="book">
+              <h2 class="title">${book.title}</h2>
+              <p class="author">${book.author}</p>
+              <img class="cover"
+                src="${book.image}">
+            </div>
+            <div class="icons">
+              <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
+                <span>${book.epubVersion.exists ? '✓' : 'X'}</span></span>
+              <br>
+              <span><img class="libbyIcon" src="libbyIcon.png">
+                <span>${libbySumOfAvailableCopies}/${libbySumOfCopies}</span></span>
+              <br>
+              <span><img class="soraIcon"
+                  src="https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png">
+                <span>${soraSumOfAvailableCopies}/${soraSumOfCopies}</span></span>
+            </div>
+          </div>`;
+            return text;
+        });
+        document.querySelector(".bookList").innerHTML += renderedBooks.join('');
     }
 }
 class Search {
