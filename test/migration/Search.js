@@ -2,7 +2,7 @@ class LibrarySearch {
     overdriveInstance;
     resultContainerSelector;
     query;
-    libraryResults;
+    libraryResults = {};
     btnOnclick;
     constructor(useLibby) {
         if (useLibby) {
@@ -22,13 +22,14 @@ class LibrarySearch {
         var results = await this.overdriveInstance.fetchLibraries(query);
         var librariesResultContainer = document.querySelector(this.resultContainerSelector);
         var newHTML = results.map((library) => {
+            let alreadyAdded = this.overdriveInstance.hasLibraryWithWebsiteId(library.websiteId);
             this.libraryResults[library.websiteId] = library;
             return `<div class="libraryResult"><img src="${library.logo}">
             <div class="libraryResultInfo">
             <h4>${library.name}</h4>
               <p>${library.locationName}<br>${library.address}<br>${library.city}, ${library.region} ${library.countryCode}<br>(1 of ${library.branchIds.length} branches)</p>
               </div>
-            <button data-library-website-id="${library.websiteId}" data-added="false" onclick="${this.btnOnclick}">Add Lib.</button></div>`;
+            <button data-library-website-id="${library.websiteId}" data-added="${alreadyAdded}" onclick="${this.btnOnclick}">${alreadyAdded ? "Remove Lib." : "Add Lib."}</button></div>`;
         });
         newHTML = newHTML.join('');
         librariesResultContainer.innerHTML = newHTML;
@@ -38,7 +39,7 @@ class LibrarySearch {
         var library = this.libraryResults[libraryWebsiteId];
         var added = btn.getAttribute("data-added");
         if (added == "true") {
-            this.overdriveInstance.removeLibrary(library);
+            this.overdriveInstance.removeLibraryWithWebsiteId(libraryWebsiteId);
             btn.setAttribute("data-added", "false");
             btn.textContent = "Add Lib.";
         } else {

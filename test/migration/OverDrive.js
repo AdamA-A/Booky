@@ -45,11 +45,16 @@ class OverDrive {
     async addLibrary(library) {
         this.#cachedUserLibraries.push(library);
     }
-    async removeLibrary(library) {
-        const indexOfLibrary = this.#cachedUserLibraries.indexOf(library);
+    async removeLibraryWithWebsiteId(libraryWebsiteId) {
+        const indexOfLibrary = this.#cachedUserLibraries.findIndex(library => library.websiteId == libraryWebsiteId);
         if (indexOfLibrary > -1) {
             this.#cachedUserLibraries.splice(indexOfLibrary, 1);
         }
+    }
+    hasLibraryWithWebsiteId(libraryWebsiteId) {
+        return this.#cachedUserLibraries.some(library => {
+            return library.websiteId == libraryWebsiteId;
+        })
     }
     async updateGASLibraries() {
         if (this.#useLibby) {
