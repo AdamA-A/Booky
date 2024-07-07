@@ -56,14 +56,14 @@ class BookSearch {
     toSearchEpubpub;
 
     // Used within class
-    results; // // An array of books to be returned by sendQuery
+    results; // // An array of books set by sendQuery
 
     constructor(toSearchLibby, toSearchSora, toSearchEpubpub) {
         this.toSearchLibby = toSearchLibby;
         this.toSearchSora = toSearchSora;
         this.toSearchEpubpub = toSearchEpubpub;
     }
-    async searchOverdrive(query) {
+    async #searchOverdrive(query) {
         var books = [];
         // Search OverDrive
         if (this.toSearchLibby || this.toSearchSora) {
@@ -74,22 +74,15 @@ class BookSearch {
             } else { // Search Sora libraries
                 books = await OverDrive.fetchBooks(query, null, OverDrive.getSoraInstance());
             }
-            /* possibleEpubPubBooks = books.map(book => {
-                return {
-                    'title': book.title.toLowerCase(),
-                    'author': book.author.toLowerCase()
-                }
-            }); */
         }
         return books;
     }
-    async searchOpenlibrary(query) {
+    async #searchOpenlibrary(query) {
         const cleanedQuery = encodeURIComponent(query.trim());
         var possibleBooks = []; // Although I could get more than one book, I decided to set the limit to one in the openlibrary api because it is quicker. Perhaps support for more books will be added in the future
 
         // Search OpenLibrary, to check later for EpubPub
         if (this.toSearchEpubpub) {
-            // console.log("fetching epubpub");
             // Documentation at https://openlibrary.org/dev/docs/api/search
             var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1`).then(response => response.json());
             var openLibraryBook = openLibraryResults.docs[0];
@@ -108,8 +101,7 @@ class BookSearch {
         var possibleEpubPubBooks = []; // To be filled with books similar to the query (book titles in lower case because they will be transcribed to a lowercased URL later)
 
         // Search for both OverDrive and EpubPub at (almost) the same time
-        this.overdriveSearchPromise = this.searchOverdrive(query);
-        var [overdriveBooks, openlibraryBooks] = await Promise.all([this.searchOverdrive(query), this.searchOpenlibrary(query)]);
+        var [overdriveBooks, openlibraryBooks] = await Promise.all([this.#searchOverdrive(query), this.#searchOpenlibrary(query)]);
 
         // Add the possible book(s) if it's not already in the list provided by Overdrive
         for (var possibleBook of openlibraryBooks) {
@@ -167,6 +159,7 @@ class BookSearch {
             return text;
         });
         document.querySelector(".bookList").innerHTML += renderedBooks.join('');
+        this.results = books;
     }
 }
 class Search {
