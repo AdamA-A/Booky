@@ -158,7 +158,7 @@ class BookSearch {
           </div>`;
             return text;
         });
-        document.querySelector(".bookList").innerHTML += renderedBooks.join('');
+        document.querySelector(".bookList").innerHTML = renderedBooks.join('');
         this.results = books;
     }
 }
