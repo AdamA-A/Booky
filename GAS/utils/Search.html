@@ -133,25 +133,7 @@ class BookSearch {
             let soraSumOfCopies = soraItems.map(item => item.ownedCopies).reduce((partialSum, a) => partialSum + a, 0);
             let soraSumOfAvailableCopies = soraItems.map(item => item.availableCopies).reduce((partialSum, a) => partialSum + a, 0);
 
-            let text = `<div class="bookContainer">
-            <div class="book">
-              <h2 class="title">${book.title}</h2>
-              <p class="author">${book.author}</p>
-              <img class="cover"
-                src="${book.image}">
-            </div>
-            <div class="icons">
-              <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
-                <span>${book.epubVersion.exists ? '✓' : 'X'}</span></span>
-              <br>
-              <span><img class="libbyIcon" src="https://libbyapp.com/dewey-16.8.0/inc/images/libby-icon-ios-180.png">
-                <span>${libbySumOfAvailableCopies}/${libbySumOfCopies}</span></span>
-              <br>
-              <span><img class="soraIcon"
-                  src="https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png">
-                <span>${soraSumOfAvailableCopies}/${soraSumOfCopies}</span></span>
-            </div>
-          </div>`;
+            let text = '<div class="bookContainer"><div class="book"><h2 class="title">' + (book.title) + '</h2><p class="author">' + (book.author) + '</p><img class="cover" src="' + (book.image) + '"></div><div class="icons"><span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128"><span>' + (book.epubVersion.exists ? '✓' : 'X') + '</span></span><br><span><img class="libbyIcon" src="https://libbyapp.com/dewey-16.8.0/inc/images/libby-icon-ios-180.png"><span>' + (libbySumOfAvailableCopies) + '/' + (libbySumOfCopies) + '</span></span><br><span><img class="soraIcon"src="https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png"><span>' + (soraSumOfAvailableCopies) + '/' + (soraSumOfCopies) + '</span></span></div></div>';
             return text;
         });
         document.querySelector(".bookList").innerHTML += renderedBooks.join('');
