@@ -19,7 +19,10 @@ class GAS {
         //
     }
     static async fetchAllWithMutedExceptions(urls) {
-      return JSON.stringify([JSON.parse( urls[0].indexOf("https://www.epub.pub/book/") == 0 ? this.ruinAndRisingEpubPage() : this.ruinAndRisingSpreadEpubPage())]);
+      let urlWithParametersObjects = urls.map((url) => {return {"url": url, "muteHttpExceptions": true};});
+      return await new Promise(r => {
+    google.script.run.withSuccessHandler(r).client_fetchAllWithMutedExceptions(urlWithParametersObjects);
+  });
     }
 }
 /* Adapted from https://developer.mozilla.org/en-US/docs/Glossary/Base64#:~:text=of%20the%20string%3A-,JS,-Copy%20to%20Clipboard */
