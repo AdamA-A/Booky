@@ -4,8 +4,8 @@ class Book {
     #instanceId;
     // Book properties
     author = "";
-    detailedSeries = {"series": "", "seriesPosition": NaN};
-    epubVersion = {"exists": false};
+    detailedSeries = { "series": "", "seriesPosition": NaN };
+    epubVersion = { "exists": false };
     id = "";
     image = "";
     items = [];
