@@ -58,7 +58,7 @@ class EpubPub {
             var parsed = docParser.parseFromString(webpage.text, 'text/html');
             var readId = parsed.querySelector(".btn-read[data-domain*=spread]").getAttribute("data-readid");
             var url = "https://spread.epub.pub/epub/" + readId;
-            spreadUrls.push(url);
+            var spreadUrlLocation = (spreadUrls.push(url)) - 1;
 
             // Parse the webpage for book's public EPUB file name
             var epubVersion = { "exists": true };
@@ -69,7 +69,7 @@ class EpubPub {
 
 
             // Make sure to mark this webpage in epubVersions
-            var spreadUrlLocation = (epubVersions.push(epubVersion)) - 1;
+            epubVersions.push(epubVersion);
             spreadUrlMap[spreadUrlLocation] = i.toString();
         })
 
