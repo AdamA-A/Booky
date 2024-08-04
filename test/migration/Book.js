@@ -57,7 +57,7 @@ class Book {
         </div>
         <div class="icons">
           <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
-            <span>${this.epubVersion.exists ? '✓' : 'X'}</span></span>
+            <span>${this.epubVersion.exists ? '&#10003;' : 'X'}</span></span>
           <br>
           <span><img class="libbyIcon" src="libbyIcon.png">
             <span>${libbySumOfAvailableCopies}/${libbySumOfCopies}</span></span>
