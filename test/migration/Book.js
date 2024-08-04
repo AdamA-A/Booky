@@ -56,7 +56,7 @@ class Book {
             src="${this.image}">
         </div>
         <div class="icons">
-          <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
+          <span onclick='${this.epubVersion.exists ? "EpubPub.downloadEpub(".concat(JSON.stringify(this.epubVersion.publicEpubFileName), ", ", JSON.stringify(this.epubVersion.contentUrl), ")") : 'void(0)'}'><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
             <span>${this.epubVersion.exists ? '&#10003;' : 'X'}</span></span>
           <br>
           <span><img class="libbyIcon" src="libbyIcon.png">
