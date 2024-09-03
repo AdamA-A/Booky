@@ -87,7 +87,7 @@
         <div class="searchWrapper">
           <h4>Book Search:</h4>
           <div class="searchBar">
-            <input class="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search for libraries..."
+            <input class="searchQueryInput" type="text" onkeypress="if (event.key == 'Enter') {Search.books.sendQuery(this.value)}" name="searchQueryInput" placeholder="Search for books..."
               value="">
             <button class="searchQuerySubmit" type="submit" name="searchQuerySubmit" onclick="Search.books.sendQuery(this.parentNode.querySelector('.searchQueryInput').value)">
               <svg style="width:24px;height:24px" viewBox="0 0 24 24">
