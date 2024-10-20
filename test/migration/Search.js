@@ -84,18 +84,29 @@ class BookSearch {
         // Search OpenLibrary, to check later for EpubPub
         if (this.toSearchEpubpub) {
             // Documentation at https://openlibrary.org/dev/docs/api/search
-            var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1&mode=everything`).then(response => response.json());
-            let docs = openLibraryResults.docs;
-            if (!(docs.length > 0)) {
-                openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?q=${cleanedQuery}&fields=title,author_name&limit=1&mode=everything`).then(response => response.json());
-                docs = openLibraryResults.docs;
-            }
-            if (docs.length > 0) {
-                var openLibraryBook = docs[0];
-                possibleBooks.push({ 'title': openLibraryBook.title, 'author': openLibraryBook.author_name[0] });
+            var openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?title=${cleanedQuery}&fields=title,author_name&limit=1&mode=everything`).then(response => response.json()).catch(this.#openLibraryFetchErrorHandler);
+            let docs = openLibraryResults?.docs;
+            // If an error hasn't occured,
+            if (docs !== undefined) {
+                // Ensure query results are accurate
+                if (!(docs.length > 0)) {
+                    openLibraryResults = await window.fetch(`https://openlibrary.org/search.json?q=${cleanedQuery}&fields=title,author_name&limit=1&mode=everything`).then(response => response.json()).catch(this.#openLibraryFetchErrorHandler);
+                    docs = openLibraryResults?.docs;
+                }
+                // Again, make sure an error hasn't occured on the retry
+                if (docs !== undefined) {
+                    if (docs.length > 0) {
+                        var openLibraryBook = docs[0];
+                        possibleBooks.push({ 'title': openLibraryBook.title, 'author': openLibraryBook.author_name[0] });
+                    }
+                }
             }
         }
         return possibleBooks;
+    }
+    #openLibraryFetchErrorHandler(error) {
+        console.error("An error occured while fetching the Open Library book search query. The error is: \n" + error.name + ": " + error.message);
+        return {};
     }
     async from(toSearchLibby, toSearchSora, toSearchEpubpub) {
         this.toSearchLibby = toSearchLibby;
