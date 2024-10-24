@@ -154,7 +154,7 @@ class BookSearch {
 class Search {
     static libbyLibraries = new LibrarySearch(true);
     static soraLibraries = new LibrarySearch(false);
-    static books = new BookSearch(true, true, true);
+    static books = new BookSearch(true, true, false);
     constructor() { }
 }
 test();
@@ -165,7 +165,7 @@ async function test() {
     var sora = OverDrive.getSoraInstance();
     var soraLibraries = await sora.fetchLibraries("noble");
     sora.addLibrary(soraLibraries[0]);
-    var search = Search.books.from(true, true, true);
+    var search = Search.books;
     console.log("Start searching...");
     console.time("Searching")
     await search.sendQuery("the 39 clues");
