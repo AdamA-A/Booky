@@ -9,10 +9,15 @@
         #bigBookContainer {
             background-color: black;
             position: fixed;
-            top: calc(5 * max(1vh, 1vw));
-            left: calc(5 * max(1vh, 1vw));
-            right: calc(5 * max(1vh, 1vw));
-            bottom: calc(5 * max(1vh, 1vw));
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding-top: calc(5 * max(1vh, 1vw));
+            padding-left: calc(5 * max(1vh, 1vw));
+            padding-right: calc(5 * max(1vh, 1vw));
+            padding-bottom: calc(5 * max(1vh, 1vw));
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: row;
             overflow: auto;
@@ -23,17 +28,17 @@
             #bigBookContainer {
                 flex-direction: column;
             }
+        }
 
-            #bbBook,
-            #bbMoreInfo {}
+        #bbBook,
+        #bbMoreInfo {
+            width: 100%;
+            height: auto;
         }
 
         #bbBook {
-            flex: 50%;
-            height: 100%;
             float: left;
             background-color: red;
-            overflow: auto;
         }
 
         #bbTitle {
@@ -61,16 +66,43 @@
             margin-left: calc((100% - clamp(25px, 90%, 400px)) / 2);
         }
 
-
-
         #bbMoreInfo {
-            flex: 50%;
-            height: 100%;
             float: right;
             background-color: green;
         }
 
-        #bbDescription {}
+        #bbMore {
+            display: none;
+        }
+
+        #bbMoreLess {
+            color: blue;
+        }
+
+        #bbEpubpubLabel {
+            color: darkGreen;
+            font-weight: bold;
+        }
+
+        #bbLibbyLabel {
+            color: purple;
+            font-weight: bold;
+        }
+
+        #bbSoraLabel {
+            color: cyan;
+            font-weight: bold;
+        }
+
+        .bbUnavailable {
+            color: black;
+            cursor: default;
+            text-decoration: none;
+        }
+
+        .bbAvailable {
+            color: green;
+        }
     </style>
 </head>
 
@@ -84,11 +116,71 @@
         </div>
         <div id="bbMoreInfo">
 
-            t</div>
+            <div id="bbDescription">
+                <p><span id="bbLess">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla
+                        et dictum interdum, nisi lorem egestas vitae scel</span><span id="bbDots">...</span><span
+                        id="bbMore">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget,
+                        auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed
+                        ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis.
+                        Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed
+                        dapibus pulvinar nibh tempor porta.</span> <a id="bbMoreLess" onclick="showHideDescription()"
+                        href="javascript:void(1);">Read more</a></p>
+            </div>
+
+            <p id="bbEpubpub">
+                <span id="bbEpubpubLabel">EpubPub: </span> <a class="bbUnavailable" href="javascript:void(1);">Download
+                    Available!</a>
+            </p>
+
+            <div id="bbLibby">
+                <p>
+                    <span id="bbLibbyLabel">Libby: </span> <span class="bbAvailable" href="javascript:void(1);">5
+                        Available Libraries!</span>
+                    <br>
+                    <span class="bbOverdriveOptions">
+
+                        <a>(1) North Shore Community College Library</a>
+                        <br>
+                        <a>(2) Salem State University College</a>
+                        <br>
+                    </span>
+                </p>
+            </div>
+
+            <div id="bbSora">
+                <p>
+                    <span id="bbSoraLabel">Sora: </span> <span class="bbUnavailable" href="javascript:void(1);">No
+                        libraries.</span>
+                    <br>
+                    <span class="bbOverdriveOptions">
+
+                        <a>(1) North Shore Community College Library</a>
+                        <br>
+                        <a>(2) Salem State University College</a>
+                        <br>
+                    </span>
+                </p>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        //
+        function showHideDescription() {
+            var dots = document.getElementById("bbDots");
+            var moreText = document.getElementById("bbMore");
+            var btnText = document.getElementById("bbMoreLess");
+
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "Read more";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "Read less";
+                moreText.style.display = "inline";
+            }
+        }
     </script>
 </body>
 
