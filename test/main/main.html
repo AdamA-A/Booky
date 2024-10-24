@@ -29,6 +29,25 @@
 </head>
 
 <body>
+  <div id="navContainer">
+    <nav>
+      <!-- Always visible items in the nav bar -->
+      <ul>
+        <li>
+      </ul>
+      <!-- The hamburger menu -->
+      <label for='menu' tabindex="0">
+        ☰
+      </label>
+      <input id='menu' type='checkbox' />
+      <!-- The collapsable menu -->
+      <ul>
+        <li><a href='javascript:void(0);' onclick="changeSceneTo('libby');">Alter Libby Libraries</a></li>
+        <li><a href='javascript:void(0);' onclick="changeSceneTo('sora');">Alter Sora Libraries</a></li>
+        <li><a href='javascript:void(0);' onclick="changeSceneTo('book');">Book Search</a></li>
+      </ul>
+    </nav>
+  </div>
   <div id="bookyBackground" class="highBookyForeground2">
     <span id="bookyForeground" class="pacifico-regular">Booky</span>
     <div id="bookyContent" style="">
@@ -176,10 +195,9 @@
   </div>
   <!-- End of Big Book Previewer -->
 
-  <button style="position: fixed; top: 0; right: 0;" onclick="sceneChange(this);" id="bme">topLeftBooky</button>
-  <button style="position: fixed; bottom: 0; right: 0;" onclick="other(this)">Other</button>
+  <button style="position: fixed; top: 0; right: 0; z-index:5000" onclick="sceneChange();"
+    id="bme">topLeftBooky</button>
   <script src="other.js"></script>
-  <script src="javascript.js"></script>
 
 
 

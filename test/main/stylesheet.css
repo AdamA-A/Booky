@@ -14,6 +14,87 @@ html {
     /* background-color: green; */
 }
 
+/* Navbar */
+#navContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: calc(100vh - 5px);
+    z-index: 2;
+
+    nav {
+        background-color: rgba(0, 0, 0, 0);
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        height: max(53px, 10vh);
+    }
+
+    nav ul {
+        /* Make the markers disappear */
+        list-style-type: none;
+    }
+
+    nav ul li {
+        /* Puts the elements in a single line */
+        display: inline-flex;
+        margin: 0.3em 1em;
+    }
+
+    input[type='checkbox']:not(:checked)+ul {
+        display: none;
+    }
+
+    nav input[type='checkbox'],
+    nav label {
+        display: none;
+    }
+
+    /* Stlying the menu icon, the checkbox stays hidden */
+    nav label {
+        text-align: right;
+        display: block;
+        padding: 0.5em;
+        line-height: 1.6em;
+        font-size: 1.6em;
+        align-self: center;
+    }
+}
+
+@media (max-width: 576px) {
+    #navContainer {
+        nav {
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        /* Because we are in mobile mode, we want to display it as a
+   vertical list */
+        nav ul {
+            display: block;
+        }
+
+        /* We have two lists: the first one are the always visibile items
+   in the menu bar. The second one is the one that will be hidden */
+        nav ul:last-child {
+            width: 100%;
+            flex-basis: 100%;
+            background-color: SeaGreen;
+        }
+
+        nav ul li {
+            margin-bottom: 0;
+            width: 100%;
+            text-align: right;
+            padding: 0.5em;
+        }
+    }
+}
+
+
 /* Booky Background */
 #bookyBackground {
     position: fixed;
@@ -406,7 +487,7 @@ border-color: #3b3461;*/
     display: flex;
     flex-direction: row;
     overflow: auto;
-    z-index: 2;
+    z-index: 3;
 }
 
 /* 800px is another good alternative */
@@ -527,5 +608,5 @@ border-color: #3b3461;*/
     top: 0;
     left: 50%;
     transform: translate(-50%, 0%);
-    z-index: 3;
+    z-index: 4;
 }

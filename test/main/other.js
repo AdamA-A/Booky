@@ -1,18 +1,14 @@
-// https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/HD_transparent_picture.png/1024px-HD_transparent_picture.png
-// https://www.epub.pub/images/apple-touch-icon.png?20191128
-// https://soraapp.com/assets/wishbone/11.6.1/assets/images/turbo-ios-icon-180.png
-// https://libbyapp.com/dewey-16.7.1/inc/images/libby-icon-ios-180.png
-// https://ssl.gstatic.com/docs/script/css/add-ons.css
-// https://img2.od-cdn.com/ImageType-150/2390-1/{62922068-4F45-415E-818B-B5AE3F3A2697}IMG150.JPG
 var cur = 3;
 var changes = ["bookyFullBackground", "middleBookyForeground", "highBookyForeground", "highBookyForeground2", "topLeftBooky"];
+const nameToScene = ["blank", "login", "libby", "sora", "book"];
+let menuCheckbox = document.getElementById("menu");
 var bookyBackground = document.getElementById('bookyBackground');
 var bookyForeground = document.getElementById('bookyForeground');
 var bookyContent = document.getElementById('bookyContent');
 var curBookyBottom = 0;
 var fixContentHeightInterval = { "interval": setInterval(fixContentHeight), "keepRunning": true };
 // window.onload = () => {bookyForeground.style.backgroundColor = "green"}
-function sceneChange(button) {
+function sceneChange(button = document.getElementById("bme")) {
     console.log(`replacing scene ${cur}: ${changes[cur]}`);
     bookyBackground.classList.remove(changes[cur]);
     cur = (cur + 1) % (changes.length);
@@ -35,10 +31,10 @@ function fixContentHeight() {
         bookyContent.style.top = curBookyBottom + "px";
     }
 }
-function other(button) {
-    var toClone = document.querySelector(changes[cur] == "highBookyForeground" ? "#libbyLibrarySearch .libraryResult" : (changes[cur] == "topLeftBooky" ? "#bookSearch .bookContainer" : "#soraLibrarySearch .libraryResult"));
-    for (var i = 0; i < 1; i++) {
-        toClone.parentNode.appendChild(toClone.cloneNode(true));
-    }
+sceneChange();
+function changeSceneTo(place) {
+    menuCheckbox.checked = false;
+    if (nameToScene[cur] == place) {return;}
+    sceneChange();
+    changeSceneTo(place);
 }
-sceneChange(document.getElementById("bme"))
