@@ -394,3 +394,135 @@ border-color: #3b3461;*/
     /*filter: invert(74%) sepia(58%) saturate(6190%) hue-rotate(121deg) brightness(196%) contrast(73%);*/
     filter: sepia(100%) saturate(300%) brightness(70%) hue-rotate(70deg);
 }
+
+/* The following is for the styling of the big book previewer */
+/* later called 'bb' instead of 'bigBook' */
+#bigBookContainer {
+    /* background-color: black; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: calc(5 * max(1vh, 1vw));
+    padding-left: calc(5 * max(1vh, 1vw));
+    padding-right: calc(5 * max(1vh, 1vw));
+    padding-bottom: calc(5 * max(1vh, 1vw));
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    z-index: 2;
+}
+
+/* 800px is another good alternative */
+@media (max-width: 650px) {
+    #bigBookContainer {
+        flex-direction: column;
+    }
+
+    #bbBook {
+        border-radius: 15px 15px 0 0;
+        -moz-border-radius: 15px 15px 0 0;
+        -webkit-border-radius: 15px 15px 0 0;
+    }
+
+    #bbMoreInfo {
+        border-radius: 0 0 15px 15px;
+        -moz-border-radius: 0 0 15px 15px;
+        -webkit-border-radius: 0 0 15px 15px;
+    }
+}
+
+#bbBook,
+#bbMoreInfo {
+    width: 100%;
+    height: auto;
+    background-color: rgba(150, 255, 150, 0.75);
+    /* padding: 5px; */
+}
+
+#bbBook {
+    float: left;
+    border-radius: 15px 0 0 15px;
+    -moz-border-radius: 15px 0 0 15px;
+    -webkit-border-radius: 15px 0 0 15px;
+    /* background-color: red; */
+}
+
+#bbTitle {
+    /* background-color: blue; */
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+#bbAuthor {
+    /* background-color: cyan; */
+    margin-top: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-weight: normal;
+}
+
+#bbCover {
+    width: clamp(25px, 90%, 400px);
+    margin-left: calc((100% - clamp(25px, 90%, 400px)) / 2);
+    max-height: 75%;
+    object-fit: contain;
+}
+
+#bbMoreInfo {
+    float: right;
+    text-align: center;
+    border-radius: 0 15px 15px 0;
+    -moz-border-radius: 0 15px 15px 0;
+    -webkit-border-radius: 0 15px 15px 0;
+    /* background-color: green; */
+}
+
+#bbMore {
+    display: none;
+}
+
+#bbMoreLess {
+    color: blue;
+}
+
+#bbEpubpubLabel {
+    color: darkGreen;
+    font-weight: bold;
+}
+
+#bbLibbyLabel {
+    color: purple;
+    font-weight: bold;
+}
+
+#bbSoraLabel {
+    color: cyan;
+    font-weight: bold;
+}
+
+.bbUnavailable {
+    color: black;
+    cursor: default;
+    text-decoration: none;
+}
+
+.bbAvailable {
+    color: green;
+}
+
+#bbClose {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    z-index: 3;
+}

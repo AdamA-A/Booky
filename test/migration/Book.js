@@ -1,4 +1,5 @@
 class Book {
+    // Searching and indexing properties
     static #instances = [];
     static #nextInstanceId = 0;
     #instanceId;
@@ -48,7 +49,7 @@ class Book {
         let soraSumOfCopies = this.sumOfCopies(soraItems);
         let soraSumOfAvailableCopies = this.sumOfAvailableCopies(soraItems);
 
-        let text = `<div class="bookContainer" data-book-instance-id="${this.#instanceId}">
+        let text = `<div class="bookContainer" data-book-instance-id="${this.#instanceId}" onclick="Book.openBigBookPreview(this);">
         <div class="book">
           <h2 class="title">${this.title}</h2>
           <p class="author">${this.author}</p>
@@ -56,7 +57,7 @@ class Book {
             src="${this.image}">
         </div>
         <div class="icons">
-          <span onclick='${this.epubVersion.exists ? "EpubPub.downloadEpub(".concat(JSON.stringify(this.epubVersion.publicEpubFileName), ", ", JSON.stringify(this.epubVersion.contentUrl), ")") : 'void(0)'}'><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
+          <span><img class="epubIcon check" src="https://www.epub.pub/images/apple-touch-icon.png?20191128">
             <span>${this.epubVersion.exists ? '&#10003;' : 'X'}</span></span>
           <br>
           <span><img class="libbyIcon" src="libbyIcon.png">
@@ -68,6 +69,29 @@ class Book {
         </div>
       </div>`;
         return text;
+    }
+    static openBigBookPreview(bookContainerElmnt) {
+        // Retrieve instance of book based on the clicked-on element
+        let instanceId = Number(bookContainerElmnt.getAttribute("data-book-instance-id"));
+        let book = Book.withId(instanceId);
+        
+        // Fill in values within Big Book Preview
+        BigBookPreview.show();
+        BigBookPreview.title = book.title;
+        BigBookPreview.author = book.author;
+        BigBookPreview.cover = book.image;
+        BigBookPreview.description = "";
+        BigBookPreview.epubAvailability = {"available": book.epubVersion.exists, "publicEpubFileName": book.epubVersion.publicEpubFileName, "contentUrl": book.epubVersion.contentUrl};
+        let availableLibbyItems = [];
+        if (book.sumOfAvailableCopies(book.libbyItems) > 0) {
+            availableLibbyItems = book.libbyItems.filter((item) => item.availableCopies > 0);
+        }
+        BigBookPreview.libbyAvailableList = availableLibbyItems;
+        let availableSoraItems = [];
+        if (book.sumOfAvailableCopies(book.soraItems) > 0) {
+            availableSoraItems = book.soraItems.filter((item) => item.availableCopies > 0);
+        }
+        BigBookPreview.soraAvailableList = availableSoraItems;
     }
     static clearBookInstances() {
         this.#instances = [];
