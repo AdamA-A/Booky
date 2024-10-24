@@ -370,12 +370,6 @@ border-color: #3b3461;*/
     position: relative;
 }
 
-.icons span {
-    /*position: absolute;
-        top: 0;
-        left: 0;*/
-}
-
 .libbyIcon,
 .soraIcon {
     width: 65px;
@@ -422,15 +416,30 @@ border-color: #3b3461;*/
     }
 
     #bbBook {
-        border-radius: 15px 15px 0 0;
         -moz-border-radius: 15px 15px 0 0;
         -webkit-border-radius: 15px 15px 0 0;
+        border-radius: 15px 15px 0 0;
     }
 
     #bbMoreInfo {
-        border-radius: 0 0 15px 15px;
         -moz-border-radius: 0 0 15px 15px;
         -webkit-border-radius: 0 0 15px 15px;
+        border-radius: 0 0 15px 15px;
+    }
+}
+
+/* another media query is required because border-radius is not overwritten by the previous media query */
+@media (min-width: 650px) {
+    #bbBook {
+        -moz-border-radius: 15px 0 0 15px;
+        -webkit-border-radius: 15px 0 0 15px;
+        border-radius: 15px 0 0 15px;
+    }
+
+    #bbMoreInfo {
+        -moz-border-radius: 0 15px 15px 0;
+        -webkit-border-radius: 0 15px 15px 0;
+        border-radius: 0 15px 15px 0;
     }
 }
 
@@ -444,9 +453,6 @@ border-color: #3b3461;*/
 
 #bbBook {
     float: left;
-    border-radius: 15px 0 0 15px;
-    -moz-border-radius: 15px 0 0 15px;
-    -webkit-border-radius: 15px 0 0 15px;
     /* background-color: red; */
 }
 
@@ -480,9 +486,6 @@ border-color: #3b3461;*/
 #bbMoreInfo {
     float: right;
     text-align: center;
-    border-radius: 0 15px 15px 0;
-    -moz-border-radius: 0 15px 15px 0;
-    -webkit-border-radius: 0 15px 15px 0;
     /* background-color: green; */
 }
 

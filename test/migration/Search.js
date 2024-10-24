@@ -165,9 +165,10 @@ async function test() {
     var sora = OverDrive.getSoraInstance();
     var soraLibraries = await sora.fetchLibraries("noble");
     sora.addLibrary(soraLibraries[0]);
-    var search = Search.books.from(true, true, false);
+    var search = Search.books.from(true, true, true);
     console.log("Start searching...");
     console.time("Searching")
-    await search.sendQuery("ruin and rising");
-    console.timeEnd("Searching")
+    await search.sendQuery("the 39 clues");
+    console.timeEnd("Searching");
+    Book.openBigBookPreview(document.querySelector("div[data-book-instance-id]"));
 }
