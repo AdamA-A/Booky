@@ -108,7 +108,7 @@ class BookSearch {
         console.error("An error occured while fetching the Open Library book search query. The error is: \n" + error.name + ": " + error.message);
         return {};
     }
-    async from(toSearchLibby, toSearchSora, toSearchEpubpub) {
+    from(toSearchLibby, toSearchSora, toSearchEpubpub) {
         this.toSearchLibby = toSearchLibby;
         this.toSearchSora = toSearchSora;
         this.toSearchEpubpub = toSearchEpubpub;
@@ -165,7 +165,7 @@ async function test() {
     var sora = OverDrive.getSoraInstance();
     var soraLibraries = await sora.fetchLibraries("noble");
     sora.addLibrary(soraLibraries[0]);
-    var search = Search.books;
+    var search = Search.books.from(true, true, false);
     console.log("Start searching...");
     console.time("Searching")
     await search.sendQuery("ruin and rising");

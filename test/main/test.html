@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Test</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <style>
+        /* later called 'bb' instead of 'bigBook' */
+        #bigBookContainer {
+            background-color: black;
+            position: fixed;
+            top: calc(5 * max(1vh, 1vw));
+            left: calc(5 * max(1vh, 1vw));
+            right: calc(5 * max(1vh, 1vw));
+            bottom: calc(5 * max(1vh, 1vw));
+            display: flex;
+            flex-direction: row;
+            overflow: auto;
+        }
+
+        /* 800px is another good alternative */
+        @media (max-width: 650px) {
+            #bigBookContainer {
+                flex-direction: column;
+            }
+
+            #bbBook,
+            #bbMoreInfo {}
+        }
+
+        #bbBook {
+            flex: 50%;
+            height: 100%;
+            float: left;
+            background-color: red;
+            overflow: auto;
+        }
+
+        #bbTitle {
+            background-color: blue;
+            margin-top: 5px;
+            margin-bottom: 0;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+
+        #bbAuthor {
+            background-color: cyan;
+            margin-top: 0;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-bottom: 5px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        #bbCover {
+            width: clamp(25px, 90%, 400px);
+            margin-left: calc((100% - clamp(25px, 90%, 400px)) / 2);
+        }
+
+
+
+        #bbMoreInfo {
+            flex: 50%;
+            height: 100%;
+            float: right;
+            background-color: green;
+        }
+
+        #bbDescription {}
+    </style>
+</head>
+
+<body>
+    <div id="bigBookContainer">
+        <div id="bbBook">
+            <h1 id="bbTitle">Title goes here la la la la a</h1>
+            <h2 id="bbAuthor">Author goes here la la la</h2>
+            <img id="bbCover"
+                src="https://img1.od-cdn.com/ImageType-150/2390-1/%7B82359A93-64DF-4AB5-AF49-186A63DE3EFE%7DIMG150.JPG">
+        </div>
+        <div id="bbMoreInfo">
+
+            t</div>
+    </div>
+
+    <script>
+        //
+    </script>
+</body>
+
+</html>
