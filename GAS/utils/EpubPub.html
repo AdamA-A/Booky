@@ -59,7 +59,7 @@ class EpubPub {
             var parsed = docParser.parseFromString(webpage.text, 'text/html');
             var readId = parsed.querySelector(".btn-read[data-domain*=spread]").getAttribute("data-readid");
             var url = "https://spread.epub.pub/epub/" + readId;
-            spreadUrls.push(url);
+            var spreadUrlLocation = (spreadUrls.push(url)) - 1;
 
             // Parse the webpage for book's public EPUB file name
             var epubVersion = { "exists": true };
@@ -70,7 +70,7 @@ class EpubPub {
 
 
             // Make sure to mark this webpage in epubVersions
-            var spreadUrlLocation = (epubVersions.push(epubVersion)) - 1;
+            epubVersions.push(epubVersion);
             spreadUrlMap[spreadUrlLocation] = i.toString();
         })
 
@@ -100,7 +100,7 @@ class EpubPub {
         // Get the Content OPF from its ACTUAL url
         var realInfo = contentUrl.substring(contentUrl.indexOf("asset.epub.pub/epub/") + 20); // Contains info from which the next two variables are derived
         epubFileName = realInfo.substring(0, realInfo.indexOf('/')); // EpubPub sometimes alters file names, like appending a "-1" to the end, so this retrieves the actual file name
-        var oebpsUrlInsert = realInfo.substring(epubFileName.length + 1, realInfo.indexOf("content.opf")); // EpubPub sometimes renames or foregoes an "OEBPS" folder, so this retrieves the name of the actual folder where OEBPS files are stored
+        var oebpsUrlInsert = realInfo.substring(epubFileName.length + 1, realInfo.substring(0, realInfo.lastIndexOf(".opf")).lastIndexOf('/') + 1); // EpubPub sometimes renames or foregoes an "OEBPS" folder, so this retrieves the name of the actual folder where OEBPS files are stored. EpubPub also sometimes calls the content.opf file something else, such as package.opf, so this accounts for those possible changes.
         var fetchContent = await window.fetch(contentUrl);
         var txt = await fetchContent.text();
         zip.file("OEBPS/content.opf", txt);

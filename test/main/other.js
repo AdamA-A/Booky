@@ -31,10 +31,20 @@ function fixContentHeight() {
         bookyContent.style.top = curBookyBottom + "px";
     }
 }
-sceneChange();
+// sceneChange();
 function changeSceneTo(place) {
     menuCheckbox.checked = false;
     if (nameToScene[cur] == place) {return;}
     sceneChange();
     changeSceneTo(place);
+}
+initForSubmission();
+async function initForSubmission() {
+    changeSceneTo("blank");
+    await sleep(1000);
+    changeSceneTo("login");
+
+}
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

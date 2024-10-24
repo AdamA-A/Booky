@@ -84,12 +84,12 @@ class Book {
         BigBookPreview.epubAvailability = {"available": book.epubVersion.exists, "publicEpubFileName": book.epubVersion.publicEpubFileName, "contentUrl": book.epubVersion.contentUrl};
         let availableLibbyItems = [];
         if (book.sumOfAvailableCopies(book.libbyItems) > 0) {
-            availableLibbyItems = book.libbyItems.filter((item) => item.availableCopies > 0);
+            availableLibbyItems = book.libbyItems.filter((item) => item.availableCopies > 0).map(x => {return {"name": x.libraryName, "url": x.href}});
         }
         BigBookPreview.libbyAvailableList = availableLibbyItems;
         let availableSoraItems = [];
         if (book.sumOfAvailableCopies(book.soraItems) > 0) {
-            availableSoraItems = book.soraItems.filter((item) => item.availableCopies > 0);
+            availableSoraItems = book.soraItems.filter((item) => item.availableCopies > 0).map(x => {return {"name": x.libraryName, "url": x.href}});;
         }
         BigBookPreview.soraAvailableList = availableSoraItems;
     }

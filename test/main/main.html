@@ -33,7 +33,7 @@
     <nav>
       <!-- Always visible items in the nav bar -->
       <ul>
-        <li>
+        <li></li>
       </ul>
       <!-- The hamburger menu -->
       <label for='menu' tabindex="0">
@@ -55,10 +55,10 @@
       <div id="googleLoginPlea">
         Booky is a free tool to retrieve books!
         <br>
-        Please log-in to a Google Account to access Booky.
+        Feel free to add your own libraries (through the apps <a href="https://libbyapp.com/" target="_blank">Libby</a> and/or <a href="https://soraapp.com/" target="_blank">Sora</a>), but if you check the 'accuracy' feature, you don't have to!
         <br>
         <br>
-        <a href="#"><button id="googleLoginButton" class="">Log In</button></a>
+        <a href="javascript:void(1);"><button id="googleLoginButton" class="" onclick="changeSceneTo('book');">To the book!</button></a>
       </div>
       <!-- Start of Libby Search -->
       <div id="libbyLibrarySearch">
@@ -197,7 +197,7 @@
   </div>
   <!-- End of Big Book Previewer -->
 
-  <button style="position: fixed; top: 0; right: 0; z-index:5000" onclick="sceneChange();"
+  <button style="display: none; position: fixed; top: 0; right: 0; z-index:5000" onclick="sceneChange();"
     id="bme">topLeftBooky</button>
   <script src="other.js"></script>
 

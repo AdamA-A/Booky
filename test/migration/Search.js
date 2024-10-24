@@ -157,7 +157,7 @@ class Search {
     static books = new BookSearch(true, true, false);
     constructor() { }
 }
-test();
+// test();
 async function test() {
     var libby = OverDrive.getLibbyInstance();
     var libbyLibraries = await libby.fetchLibraries("noble");

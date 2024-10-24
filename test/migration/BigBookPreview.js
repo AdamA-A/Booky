@@ -104,11 +104,14 @@ class BigBookPreview {
         if (newList.length == 0) {
             this.libbyLibraryListElmnt.innerHTML = "";
             this.libbyLibraryListElmnt.setAttribute("class", "bbUnavailable");
-            this.libbyLibraryListElmnt.textContent = "No Available Libraries."
+            this.libbyLibraryListElmnt.textContent = "No Available Libraries.";
+            this.libbyAvailableElmnt.setAttribute("class", "bbUnavailable");
+            this.libbyAvailableElmnt.textContent = "No Libraries.";
         } else {
-            let anchors = newList.map((library, i) => {return '<a href="' + library.url + '">(' + (i + 1) + ') ' + library.name + '</a>';}).join("<br>");
+            let anchors = newList.map((library, i) => {return '<a target="_blank" href="' + library.url + '">(' + (i + 1) + ') ' + library.name + '</a>';}).join("<br>");
             this.libbyLibraryListElmnt.innerHTML = anchors;
             this.libbyLibraryListElmnt.setAttribute("class", "");
+            this.libbyAvailableElmnt.setAttribute("class", "bbAvailable");
             this.libbyAvailableElmnt.textContent = newList.length + " Available Libraries!";
         }
     }
@@ -125,11 +128,15 @@ class BigBookPreview {
         if (newList.length == 0) {
             this.soraLibraryListElmnt.innerHTML = "";
             this.soraLibraryListElmnt.setAttribute("class", "bbUnavailable");
-            this.soraLibraryListElmnt.textContent = "No Available Libraries."
+            this.soraLibraryListElmnt.textContent = "No Available Libraries.";
+            this.soraAvailableElmnt.setAttribute("class", "bbUnavailable");
+            this.soraAvailableElmnt.textContent = "No Libraries.";
         } else {
-            let anchors = newList.map(library => {return '<a href="' + library.url + '">' + library.name + '</a>';}).join("<br>");
+            let anchors = newList.map(library => {return '<a target="_blank" href="' + library.url + '">' + library.name + '</a>';}).join("<br>");
             this.soraLibraryListElmnt.innerHTML = anchors;
             this.soraLibraryListElmnt.setAttribute("class", "");
+            this.soraAvailableElmnt.textContent = newList.length + " Available Libraries!";
+            this.soraAvailableElmnt.setAttribute("class", "bbAvailable");
             this.soraAvailableElmnt.textContent = newList.length + " Available Libraries!";
         }
     }
